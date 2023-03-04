@@ -126,8 +126,8 @@ class RSDDDataset(CustomDataset):
                 ]],
                                 dtype=np.float32)
 
-                polygon = obb2poly_np(bbox, 'le90')[0, :-1].astype(np.float32)
-                if self.version != 'le90':
+                polygon = obb2poly_np(bbox, 'le90')[0, :-1].astype(np.float32) # 这里的le90是指读取标注时数据集本身采用的旋转框标注格式
+                if self.version != 'le90': # 这里的角度version是指在程序中进行处理的版本
                     bbox = np.array(
                         poly2obb_np(polygon, self.version), dtype=np.float32)
                 else:
