@@ -70,12 +70,16 @@ def convert(xml_dir, ann_file, json_file, version = "le90"):
         json_dict['images'].append(image)
         
         for obj in root.findall('object'):
+            
+            w = float(obj.find('robndbox/w').text)
+            h = float(obj.find('robndbox/h').text)
             bbox = np.array([[
                 float(obj.find('robndbox/cx').text),
                 float(obj.find('robndbox/cy').text),
-                float(obj.find('robndbox/h').text),
-                float(obj.find('robndbox/w').text),
-                float(obj.find('robndbox/angle').text), 0 ]], dtype=np.float32) 
+                max(w,h),
+                min(w,h),
+                float(obj.find('robndbox/angle').text),0]], dtype=np.float32)
+
             area = (bbox[0,2]*bbox[0,3]).item()
             polygon = obb2poly_np(bbox, 'le90')[0, :-1].astype(np.float32)
             if version != 'le90':
@@ -110,4 +114,4 @@ def convert(xml_dir, ann_file, json_file, version = "le90"):
     json_fp.close()
 
 for data in ["train", "test", "test_inshore", "test_offshore"]:
-    convert("/mmrotate/data/rsdd/Annotations", f"/mmrotate/data/rsdd/ImageSets/{data}.txt", f"/mmrotate/data/rsdd/ImageSets/{data}_selfmade.json", version = "le90")    
+    convert("/mmrotate/data/rsdd/Annotations", f"/mmrotate/data/rsdd/ImageSets/{data}.txt", f"/mmrotate/data/rsdd/ImageSets/{data}.json", version = "le90")    
