@@ -113,11 +113,15 @@ class RSDDDataset(CustomDataset):
                     label = 0
 
                 # Add an extra score to use obb2poly_np
+                # 这里obb2poly_np函数调用时输入参数为(cx,cy,w,h,thrta), 但数据集标注时采用长边定义法，所以第三个参数w为长边
+                # 详细分析参见博客https://editor.csdn.net/md/?articleId=129341850
+                w = float(obj.find('robndbox/w').text)
+                h = float(obj.find('robndbox/h').text)
                 bbox = np.array([[
                     float(obj.find('robndbox/cx').text),
                     float(obj.find('robndbox/cy').text),
-                    float(obj.find('robndbox/h').text),
-                    float(obj.find('robndbox/w').text),
+                    max(w,h),
+                    min(w,h),
                     float(obj.find('robndbox/angle').text), 0
                 ]],
                                 dtype=np.float32)
