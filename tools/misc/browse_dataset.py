@@ -91,6 +91,20 @@ def main():
         gt_bboxes = item['gt_bboxes']
         gt_labels = item['gt_labels']
 
+#         import numpy as np
+#         i = 0
+#         imshow_det_rbboxes(
+#             item['img'],
+#             gt_bboxes[i][np.newaxis, :],
+#             np.array([gt_labels[i]]),
+#             class_names=dataset.CLASSES,
+#             score_thr=0,
+#             show=not args.not_show,
+#             wait_time=args.show_interval,
+#             out_file=filename,
+#             bbox_color=dataset.PALETTE,
+#             text_color=(200, 200, 200))
+        
         imshow_det_rbboxes(
             item['img'],
             gt_bboxes,
